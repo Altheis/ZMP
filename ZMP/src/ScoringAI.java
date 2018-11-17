@@ -23,8 +23,11 @@ public class ScoringAI implements AI {
 			if(steps > 1)  {
 				char[][] testBoard = simulateBoard(board, m, model);
 				ArrayList<Move> candidates = model.checkValidMoves(testBoard, opponent);
-			    Move bestResponse = pickBest(testBoard, opponent, currentPlayer, model, candidates, steps-1);
-			    score -= scoreTheMove(bestResponse, testBoard, opponent, currentPlayer, model);
+				if(candidates.size()>0) {
+					Move bestResponse = pickBest(testBoard, opponent, currentPlayer, model, candidates, steps-1);
+			    	score -= scoreTheMove(bestResponse, testBoard, opponent, currentPlayer, model);
+				}
+				else score+=10000000;
 			}
 			if(score>bestScore) {
 				best = m;
