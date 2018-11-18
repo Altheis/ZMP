@@ -173,9 +173,9 @@ public class Model {
         ArrayList<Move> moves = new ArrayList<Move>();
         for (int i = 1; i < board.length - 1; i++) {
             for (int j = 1; j < board[i].length - 1; j++) {
-                if (board[i][j] == player) {
+                if (board[i][j] == player||board[i][j]==player+2) {
                     moves.addAll(checkMove(board, i, j));
-                } else if (board[i][j] == Character.toUpperCase(player)) {
+                } else if (board[i][j] == Character.toUpperCase(player)||board[i][j]==Character.toUpperCase(player+2)) {
                     moves.addAll(checkQueenMove(board, i, j));
                 }
             }

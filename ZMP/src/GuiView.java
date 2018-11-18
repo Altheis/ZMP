@@ -10,7 +10,7 @@ public class GuiView implements View {
     private GUI gui;
     static public Point startpoint;
     static public Point endpoint;
-
+    static JLabel jl;
     GuiView() {
         gui = new GUI();
     }
@@ -53,8 +53,8 @@ public class GuiView implements View {
         int xLocation, yLocation;
         int size = 64;
         int onePoint = 40;
-        int start = 0;
-        JLabel jl;
+
+
 
         public GUI() {
             super("Warcaby");
@@ -72,7 +72,12 @@ public class GuiView implements View {
         public void makeBoard(Graphics g) {
             for (int x = 1; x < board.length - 1; x++) {
                 for (int y = 1; y < board.length - 1; y++) {
-
+                    if (board[y][x] == Model.player1&&y==1){
+                        board[y][x]+=2;
+                    }
+                    if (board[y][x] == Model.player2&&y==9){
+                        board[y][x]+=2;
+                    }
                     if ((x % 2 == 0 && y % 2 != 0) || (x % 2 != 0 && y % 2 == 0)) {
                         g.setColor(new Color(89, 170, 103));
                     } else {
@@ -92,7 +97,12 @@ public class GuiView implements View {
                         g.setColor(new Color(229, 38, 22));
                     } else if (board[y][x] == Model.player2) {
                         g.setColor(new Color(247, 250, 246));
+                    } else if (board[y][x] == '3'){
+                        g.setColor(new Color(122, 8, 8));
+                    } else if (board[y][x] == '4'){
+                        g.setColor(new Color(118, 122, 119));
                     }
+
                     if (board[y][x] != Model.empty) {
                         g.fillOval(xLocation, yLocation, onePoint, onePoint);
                     }
@@ -108,9 +118,9 @@ public class GuiView implements View {
             super.paint(g);
             xLocation = 40;
             yLocation = 50;
-            if (start == 0) {
-                makeBoard(g);
-            }
+
+            makeBoard(g);
+
 
 
             x_mouse = 0;
