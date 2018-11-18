@@ -37,8 +37,12 @@ public class Controller {
 
 			ArrayList<Move> valid =model.checkValidMoves(view.getBoard(), model.currentPlayer);
 			if(valid.size()==0) {
-				view.endGame(model.currentPlayer+" lost the game!");
-				System.exit(0);
+				if(model.currentPlayer==Model.player2) {
+					GuiView.jl.setText("Komputer przegrał rozgrywkę");
+					break;
+				}
+				GuiView.jl.setText("Użytkownik przegrał rozgrywkę");
+				break;
 			}
 
 			Move move=null;
@@ -46,6 +50,7 @@ public class Controller {
 			if(model.currentPlayer== Model.player1&&done!=0) {
 			move = new Move(startCell,endCell,null);
 			move = model.verifyMove(move, valid);
+			if(move==null) GuiView.jl.setText("Zły ruch!!");
 			done=0;
 			}
 			else if (model.currentPlayer==Model.player2) {
