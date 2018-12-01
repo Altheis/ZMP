@@ -1,3 +1,4 @@
+package ZMP;
 
 import javax.swing.*;
 import java.awt.*;
@@ -43,10 +44,6 @@ public class GuiView implements View {
         this.board = newBoard;
     }
 
-    @Override
-    public void endGame(String result) {
-        System.out.println(result);
-    }
 
     class GUI extends JFrame implements MouseListener {
 
@@ -59,12 +56,15 @@ public class GuiView implements View {
         public GUI() {
             super("Warcaby");
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            setSize(new Dimension(400, 400));
+            if(Controller.dim==8){
+            setSize(400,420);}
+            else setSize(500,500);
 
             setLayout(new BorderLayout());
             jl = new JLabel("Rozpocznij grę", JLabel.CENTER);
             add(BorderLayout.SOUTH, jl);
             addMouseListener(this);
+
             setVisible(true);
 
         }
@@ -75,7 +75,7 @@ public class GuiView implements View {
                     if (board[y][x] == Model.player1&&y==1){
                         board[y][x]+=2;
                     }
-                    if (board[y][x] == Model.player2&&y==9){
+                    if (board[y][x] == Model.player2&&y==board.length){
                         board[y][x]+=2;
                     }
                     if ((x % 2 == 0 && y % 2 != 0) || (x % 2 != 0 && y % 2 == 0)) {
@@ -140,11 +140,11 @@ public class GuiView implements View {
             x_mouse = ev.getX();
             y_mouse = ev.getY();
 
-            int x = (int) (x_mouse / 40);
-            int y = (int) (y_mouse / 40);
+            int x = (x_mouse / 40);
+            int y = (y_mouse / 40);
 
-            if (x == 9) x--;
-            if (y == 9) y--;
+            if (x == board.length) x--;
+            if (y == board.length) y--;
 
 
             if (first == 0) {
