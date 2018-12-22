@@ -3,6 +3,7 @@ package ZMP;
 import javax.swing.*;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Controller {
 	static int done = 0;
@@ -13,8 +14,8 @@ public class Controller {
 		Model model;
 		View view;
 		AI ai;
-		Object[] options = {"Sztuczną inteligencję",
-				"Gra dwuosobowa"};
+		Object[] options = {"Sztuczną inteligencję (Scoring)","Sztuczną inteligencję (Random)",
+				"Gra dwuosobowa","Dwie sztuczne inteligencje"};
 		int n = JOptionPane.showOptionDialog(new JFrame(),
 				"Jakiego przeciwnika wybierasz?",
 				"Wybór przeciwnika",
@@ -79,26 +80,72 @@ public class Controller {
 			view.displayBoard();
 		}
 	int s=0;
+		Object[] options4 = {"Tak",
+				"Nie"};
 		while (true) {
 
 			ArrayList<Move> valid = model.checkValidMoves(view.getBoard(), model.currentPlayer);
 
-			if (valid.size() == 0) {
+			out: if (valid.size() == 0) {
 				if (model.currentPlayer == Model.player2) {
 					if (n3 == 0) {
 						System.out.println("Komputer przegrał rozgrywkę");
-					} else
+						System.out.println("Czy chcesz zagrac ponownie? (y/n)");
+						Scanner in=new Scanner(System.in);
+						if(in.next().equals("y")){
+							view.setBoard(model.createBoard());
+							valid = model.checkValidMoves(view.getBoard(), model.currentPlayer);
+							break out;
+						}
+						else break;
+					} else {
 						GuiView.jl.setText("Komputer przegrał rozgrywkę");
-					break;
+
+						int n4 = JOptionPane.showOptionDialog(new JFrame(),
+								"Chcesz zagrać jeszcze raz?",
+								"Koniec gry",
+								JOptionPane.YES_NO_CANCEL_OPTION,
+								JOptionPane.QUESTION_MESSAGE,
+								null,
+								options4,
+								options4[1]);
+						if (n4 == 0) {
+							view.setBoard(model.createBoard());
+							valid = model.checkValidMoves(view.getBoard(), model.currentPlayer);
+							break out;
+						} else break;
+					}
 				}
 				if (n3 == 0) {
 					System.out.println("Użytkownik przegrał rozgrywkę");
-				} else
+					System.out.println("Czy chcesz zagrac ponownie? (y/n)");
+					Scanner in=new Scanner(System.in);
+					if(in.next().equals("y")){
+						view.setBoard(model.createBoard());
+						valid = model.checkValidMoves(view.getBoard(), model.currentPlayer);
+						break out;
+					}
+					else break;
+				} else {
 					GuiView.jl.setText("Użytkownik przegrał rozgrywkę");
-				break;
+					int n4 = JOptionPane.showOptionDialog(new JFrame(),
+							"Chcesz zagrać jeszcze raz?",
+							"Koniec gry",
+							JOptionPane.YES_NO_CANCEL_OPTION,
+							JOptionPane.QUESTION_MESSAGE,
+							null,
+							options4,
+							options4[1]);
+					if (n4 == 0) {
+						view.setBoard(model.createBoard());
+						valid = model.checkValidMoves(view.getBoard(), model.currentPlayer);
+						break out;
+					}
+					else break;
+				}
 			}
 			Move move = null;
-			if (n3 == 0&&s==0) {
+			if ((n3 == 0&&s==0&&n!=3)||(n==2&&n3==0)) {
 				for (Move m : valid) System.out.println("Współrzędne startowe "+m.start.x +", "+ m.start.y +". Współrzędne końcowe " + m.target.x+", "+m.target.y );
 				move = new Move(view.moveStartCell(), view.moveEndCell(), null);
 				move = model.verifyMove(move, valid);
@@ -111,7 +158,7 @@ public class Controller {
 			}
 
 
-			if (model.currentPlayer == Model.player1 && done != 0) {
+			if ((model.currentPlayer == Model.player1 && done != 0 && n!=3)||(n==2&& done != 0)) {
 				move = new Move(startCell, endCell, null);
 				move = model.verifyMove(move, valid);
 				if (move == null) {
@@ -121,8 +168,15 @@ public class Controller {
 
 				}
 
-				} else if (model.currentPlayer == Model.player2) {
+				} else if (((model.currentPlayer == Model.player2)||(model.currentPlayer == Model.player1&&n==3))&&n!=2) {
 					move = ai.makeAMove(view.getBoard(), valid, model.currentPlayer, model.currentPlayer == Model.player1 ? Model.player2 : Model.player1, model);
+					if(n==3){
+						try {
+							Thread.sleep(100);
+						} catch (InterruptedException e) {
+							System.out.println("Nie przeszkadzaj");
+						}
+					}
 					s=0;
 			}
 				if (move != null) {
@@ -134,6 +188,7 @@ public class Controller {
 				}
 
 			}
+
 		}
 	}
 

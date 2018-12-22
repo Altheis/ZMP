@@ -4,8 +4,8 @@ import java.awt.Point;
 import java.util.ArrayList;
 
 public class Model {
-    public static final char player1 = '1';
-    public static final char player2 = '2';
+    public static final char player1 = 'w';
+    public static final char player2 = 'z';
     public static final char empty = '0';
     private int dim;
     public char currentPlayer;

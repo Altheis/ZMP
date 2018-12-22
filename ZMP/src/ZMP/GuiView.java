@@ -58,8 +58,11 @@ public class GuiView implements View {
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             if(Controller.dim==8){
             setSize(400,420);}
-            else setSize(500,500);
-
+            else setSize(480,480);
+            Dimension d=Toolkit.getDefaultToolkit().getScreenSize();
+            int x=(int)((d.getWidth()-getWidth())/2);
+            int y=(int)((d.getHeight()-getHeight())/2);
+            setLocation(x,y);
             setLayout(new BorderLayout());
             jl = new JLabel("Rozpocznij grę", JLabel.CENTER);
             add(BorderLayout.SOUTH, jl);
@@ -72,12 +75,7 @@ public class GuiView implements View {
         public void makeBoard(Graphics g) {
             for (int x = 1; x < board.length - 1; x++) {
                 for (int y = 1; y < board.length - 1; y++) {
-                    if (board[y][x] == Model.player1&&y==1){
-                        board[y][x]+=2;
-                    }
-                    if (board[y][x] == Model.player2&&y==board.length){
-                        board[y][x]+=2;
-                    }
+
                     if ((x % 2 == 0 && y % 2 != 0) || (x % 2 != 0 && y % 2 == 0)) {
                         g.setColor(new Color(89, 170, 103));
                     } else {
@@ -97,9 +95,9 @@ public class GuiView implements View {
                         g.setColor(new Color(229, 38, 22));
                     } else if (board[y][x] == Model.player2) {
                         g.setColor(new Color(247, 250, 246));
-                    } else if (board[y][x] == '3'){
+                    } else if (board[y][x] == Character.toUpperCase(Model.player1)){
                         g.setColor(new Color(122, 8, 8));
-                    } else if (board[y][x] == '4'){
+                    } else if (board[y][x] == Character.toUpperCase(Model.player2)){
                         g.setColor(new Color(118, 122, 119));
                     }
 
