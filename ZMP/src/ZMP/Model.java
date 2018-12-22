@@ -120,12 +120,12 @@ public class Model {
 
     private ArrayList<Move> checkTake(char[][] board, int i, int j) {
         ArrayList<Move> moves = new ArrayList<Move>();
-        ArrayList<Point> takes = new ArrayList<Point>();
         char opponent = currentPlayer == player1 ? player2 : player1;
         for (int n = -1; n <= 1; n += 2)
             for (int m = -1; m <= 1; m += 2)
                 if (Character.toLowerCase(board[i + n][j + m]) == opponent)
                     if (board[i + 2 * n][j + 2 * m] == empty) {
+                    	ArrayList<Point> takes = new ArrayList<Point>();
                         char[][] copy = copyBoard(board);
                         takes.add(new Point(i + n, j + m));
                         Move take = new Move(new Point(i, j), new Point(i + 2 * n, j + 2 * m), takes);
@@ -142,7 +142,6 @@ public class Model {
 
     private ArrayList<Move> checkQueenTake(char[][] board, int i, int j) {
         ArrayList<Move> moves = new ArrayList<Move>();
-        ArrayList<Point> takes = new ArrayList<Point>();
         char opponent = currentPlayer == player1 ? player2 : player1;
         int distance = 1;
         for (int n = -1; n <= 1; n += 2)
@@ -151,6 +150,7 @@ public class Model {
                 while (board[i + distance * n][j + distance * m] == empty) distance++;
                 if (board[i + distance * n][j + distance * m] != '\u0000') {
                     if (Character.toLowerCase(board[i + distance * n][j + distance * m]) == opponent) {
+                    	ArrayList<Point> takes = new ArrayList<Point>();
                         int jumpover = Math.abs(distance) + 1;
                         while (board[i + jumpover * n][j + jumpover * m] == empty) {
                             char[][] copy = copyBoard(board);
