@@ -120,7 +120,7 @@ public class Model {
 
     private ArrayList<Move> checkTake(char[][] board, int i, int j) {
         ArrayList<Move> moves = new ArrayList<Move>();
-        char opponent = currentPlayer == player1 ? player2 : player1;
+        char opponent = board[i][j] == player1 ? player2 : player1;
         for (int n = -1; n <= 1; n += 2)
             for (int m = -1; m <= 1; m += 2)
                 if (Character.toLowerCase(board[i + n][j + m]) == opponent)
@@ -142,7 +142,7 @@ public class Model {
 
     private ArrayList<Move> checkQueenTake(char[][] board, int i, int j) {
         ArrayList<Move> moves = new ArrayList<Move>();
-        char opponent = currentPlayer == player1 ? player2 : player1;
+        char opponent = Character.toLowerCase(board[i][j]) == player1 ? player2 : player1;
         int distance = 1;
         for (int n = -1; n <= 1; n += 2)
             for (int m = -1; m <= 1; m += 2) {
@@ -157,7 +157,7 @@ public class Model {
                             takes.add(new Point(i + distance * n, j + distance * m));
                             Move take = new Move(new Point(i, j), new Point(i + jumpover * n, j + jumpover * m), takes);
                             copy = performMove(take, copy);
-                            ArrayList<Move> chain = checkTake(copy, i + jumpover * n, j + jumpover * m);
+                            ArrayList<Move> chain = checkQueenTake(copy, i + jumpover * n, j + jumpover * m);
                             if (chain.size() > 0) {
                                 moves.addAll(colapseChainTake(take, chain));
                             } else moves.add(take);

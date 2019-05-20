@@ -66,7 +66,7 @@ public class Controller {
 		view.setBoard(model.createBoard());
 
 		try {
-			if (n == 0)
+			if (n == 0 || n==3)
 				ai = Factory.createAI("ZMP.ScoringAI");
 			else
 				ai = Factory.createAI("ZMP.RandomAI");

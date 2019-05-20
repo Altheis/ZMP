@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class ScoringAI implements AI {
 	private final int queenValue = 4;
-	private final int thinkingSteps = 9;
+	private final int thinkingSteps = 6;
 
 	@Override
 	public Move makeAMove(char[][] board, ArrayList<Move> moves, char currentPlayer, char opponent, Model model) {
@@ -20,6 +20,9 @@ public class ScoringAI implements AI {
 	private Move pickBest(char[][] board, char currentPlayer, char opponent, Model model, ArrayList<Move> moves, int steps) {
 		Move best = null;
 		int bestScore = -2000000;
+		if(moves.size() == 1){
+			return moves.get(0);
+		}
 		for(Move m : moves) {
 			int score = scoreTheMove(m, board, currentPlayer, opponent, model);
 			if(steps > 1)  {
@@ -27,9 +30,9 @@ public class ScoringAI implements AI {
 				ArrayList<Move> candidates = model.checkValidMoves(testBoard, opponent);
 				if(candidates.size()>0) {
 					Move bestResponse = pickBest(testBoard, opponent, currentPlayer, model, candidates, steps-1);
-			    	score -= scoreTheMove(bestResponse, testBoard, opponent, currentPlayer, model);
+			    	score = scoreTheMove(bestResponse, testBoard, opponent, currentPlayer, model) * (-1);
 				}
-				else score+=10000000;
+				else score=10000000;
 			}
 			if(score>bestScore) {
 				best = m;
