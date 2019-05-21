@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class ScoringAI implements AI {
 	private final int queenValue = 4;
-	private final int thinkingSteps = 6;
+	private final int thinkingSteps = 5;
 
 	@Override
 	public Move makeAMove(char[][] board, ArrayList<Move> moves, char currentPlayer, char opponent, Model model) {
@@ -24,16 +24,7 @@ public class ScoringAI implements AI {
 			return moves.get(0);
 		}
 		for(Move m : moves) {
-			int score = scoreTheMove(m, board, currentPlayer, opponent, model);
-			if(steps > 1)  {
-				char[][] testBoard = simulateBoard(board, m, model);
-				ArrayList<Move> candidates = model.checkValidMoves(testBoard, opponent);
-				if(candidates.size()>0) {
-					Move bestResponse = pickBest(testBoard, opponent, currentPlayer, model, candidates, steps-1);
-			    	score = scoreTheMove(bestResponse, testBoard, opponent, currentPlayer, model) * (-1);
-				}
-				else score=10000000;
-			}
+			int score = scoreTheMove(m, board, currentPlayer, opponent, model, steps);
 			if(score>bestScore) {
 				best = m;
 				bestScore = score;
@@ -41,7 +32,7 @@ public class ScoringAI implements AI {
 		}
 		return best;
 	}
-	
+
 	private int scoreTheBoard(char[][] board, char currentPlayer,char opponent) {
 		int score = 0;		
 		for(int i=1;i<board.length-1;i++) {
@@ -55,9 +46,22 @@ public class ScoringAI implements AI {
 		return score;
 	}
 	
-	private int scoreTheMove(Move move, char[][] board, char currentPlayer, char opponent, Model model) {
+	private int scoreTheMove(Move move, char[][] board, char currentPlayer, char opponent, Model model, int steps) {
 		char[][] copy = Model.copyBoard(board);
-		return scoreTheBoard(model.performMove(move, copy), currentPlayer, opponent);
+		copy = model.performMove(move, copy);
+		int score;
+		if(steps == 0){
+			score = scoreTheBoard(copy, currentPlayer, opponent);
+		}
+		else{
+			ArrayList<Move> candidates = model.checkValidMoves(copy, opponent);
+			if(candidates.size()==0){
+				return 0;
+			}
+			Move response = this.pickBest(copy, opponent, currentPlayer, model, candidates, steps-1);
+			score = this.scoreTheMove(response, copy, opponent, currentPlayer, model, steps -1) * (-1);
+		}
+		return score;
 	}
 
 }
