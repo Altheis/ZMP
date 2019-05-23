@@ -1,14 +1,13 @@
-package ZMP;
+package MSIWPG;
 
 import java.util.ArrayList;
 
 public class ScoringAI implements AI {
-	private final int queenValue = 4;
-	private final int thinkingSteps = 5;
 
 	@Override
 	public Move makeAMove(char[][] board, ArrayList<Move> moves, char currentPlayer, char opponent, Model model) {
-		return pickBest(board, currentPlayer, opponent, model, moves, this.thinkingSteps);
+		int thinkingSteps = 5;
+		return pickBest(board, currentPlayer, opponent, model, moves, thinkingSteps);
 	}
 	
 	
@@ -37,10 +36,11 @@ public class ScoringAI implements AI {
 		int score = 0;		
 		for(int i=1;i<board.length-1;i++) {
 			for(int j=1;j<board[i].length-1;j++) {
+				int queenValue = 4;
 				if(board[i][j]==currentPlayer)	score++;
 				else if(board[i][j]==opponent) score--;
-				else if(board[i][j]==Character.toUpperCase(currentPlayer)) score+=queenValue;
-				else if(board[i][j]==Character.toUpperCase(opponent)) score-=queenValue;
+				else if(board[i][j]==Character.toUpperCase(currentPlayer)) score+= queenValue;
+				else if(board[i][j]==Character.toUpperCase(opponent)) score-= queenValue;
 			}
 		}
 		return score;

@@ -1,13 +1,13 @@
-package ZMP;
+package MSIWPG;
 
 import java.awt.Point;
 import java.util.ArrayList;
 
-public class Model {
+class Model {
     public static final char player1 = 'w';
     public static final char player2 = 'z';
     public static final char empty = '0';
-    private int dim;
+    private final int dim;
     public char currentPlayer;
 
     public Model(int dim) {
@@ -18,8 +18,7 @@ public class Model {
     public static char[][] copyBoard(char[][] board) {
         char[][] copy = new char[board.length][board[0].length];
         for (int i = 0; i < board.length; i++)
-            for (int j = 0; j < board[i].length; j++)
-                copy[i][j] = board[i][j];
+            if (board[i].length >= 0) System.arraycopy(board[i], 0, copy[i], 0, board[i].length);
         return copy;
     }
 
@@ -41,13 +40,13 @@ public class Model {
     }
 
     private ArrayList<Move> checkMove(char[][] board, int i, int j) {
-        ArrayList<Move> moves = new ArrayList<Move>();
+        ArrayList<Move> moves = new ArrayList<>();
         int direction = (board[i][j] == player1) ? -1 : 1;
         //check basic moves
         if (board[i + direction][j - 1] == empty)
-            moves.add(new Move(new Point(i, j), new Point(i + direction, j - 1), new ArrayList<Point>()));
+            moves.add(new Move(new Point(i, j), new Point(i + direction, j - 1), new ArrayList<>()));
         if (board[i + direction][j + 1] == empty)
-            moves.add(new Move(new Point(i, j), new Point(i + direction, j + 1), new ArrayList<Point>()));
+            moves.add(new Move(new Point(i, j), new Point(i + direction, j + 1), new ArrayList<>()));
 
         //check takes
         moves.addAll(checkTake(board, i, j));
@@ -58,7 +57,7 @@ public class Model {
 
     private ArrayList<Move> removeDuplicateTakes(ArrayList<Move> moves) {
         for (Move m : moves) {
-            ArrayList<Point> cleaned = new ArrayList<Point>();
+            ArrayList<Point> cleaned = new ArrayList<>();
             for (Point p1 : m.takes) {
                 boolean found = false;
                 for (Point p2 : cleaned)
@@ -71,26 +70,26 @@ public class Model {
     }
 
     private ArrayList<Move> checkQueenMove(char[][] board, int i, int j) {
-        ArrayList<Move> moves = new ArrayList<Move>();
+        ArrayList<Move> moves = new ArrayList<>();
         int distance = 1;
         //check basic moves
         while (board[i + distance][j + distance] == empty) {
-            moves.add(new Move(new Point(i, j), new Point(i + distance, j + distance), new ArrayList<Point>()));
+            moves.add(new Move(new Point(i, j), new Point(i + distance, j + distance), new ArrayList<>()));
             distance++;
         }
         distance = 1;
         while (board[i + distance][j - distance] == empty) {
-            moves.add(new Move(new Point(i, j), new Point(i + distance, j - distance), new ArrayList<Point>()));
+            moves.add(new Move(new Point(i, j), new Point(i + distance, j - distance), new ArrayList<>()));
             distance++;
         }
         distance = 1;
         while (board[i - distance][j + distance] == empty) {
-            moves.add(new Move(new Point(i, j), new Point(i - distance, j + distance), new ArrayList<Point>()));
+            moves.add(new Move(new Point(i, j), new Point(i - distance, j + distance), new ArrayList<>()));
             distance++;
         }
         distance = 1;
         while (board[i - distance][j - distance] == empty) {
-            moves.add(new Move(new Point(i, j), new Point(i - distance, j - distance), new ArrayList<Point>()));
+            moves.add(new Move(new Point(i, j), new Point(i - distance, j - distance), new ArrayList<>()));
             distance++;
         }
 
@@ -102,7 +101,7 @@ public class Model {
     }
 
     private ArrayList<Move> pickLongestTake(ArrayList<Move> chain) {
-        ArrayList<Move> filtered = new ArrayList<Move>();
+        ArrayList<Move> filtered = new ArrayList<>();
         int best = 0;
         for (Move m : chain) if (m.takes.size() > best) best = m.takes.size();
         for (Move m : chain) if (m.takes.size() == best) filtered.add(m);
@@ -119,13 +118,13 @@ public class Model {
     }
 
     private ArrayList<Move> checkTake(char[][] board, int i, int j) {
-        ArrayList<Move> moves = new ArrayList<Move>();
+        ArrayList<Move> moves = new ArrayList<>();
         char opponent = board[i][j] == player1 ? player2 : player1;
         for (int n = -1; n <= 1; n += 2)
             for (int m = -1; m <= 1; m += 2)
                 if (Character.toLowerCase(board[i + n][j + m]) == opponent)
                     if (board[i + 2 * n][j + 2 * m] == empty) {
-                    	ArrayList<Point> takes = new ArrayList<Point>();
+                    	ArrayList<Point> takes = new ArrayList<>();
                         char[][] copy = copyBoard(board);
                         takes.add(new Point(i + n, j + m));
                         Move take = new Move(new Point(i, j), new Point(i + 2 * n, j + 2 * m), takes);
@@ -141,16 +140,16 @@ public class Model {
     }
 
     private ArrayList<Move> checkQueenTake(char[][] board, int i, int j) {
-        ArrayList<Move> moves = new ArrayList<Move>();
+        ArrayList<Move> moves = new ArrayList<>();
         char opponent = Character.toLowerCase(board[i][j]) == player1 ? player2 : player1;
-        int distance = 1;
+        int distance;
         for (int n = -1; n <= 1; n += 2)
             for (int m = -1; m <= 1; m += 2) {
                 distance = 1;
                 while (board[i + distance * n][j + distance * m] == empty) distance++;
                 if (board[i + distance * n][j + distance * m] != '\u0000') {
                     if (Character.toLowerCase(board[i + distance * n][j + distance * m]) == opponent) {
-                    	ArrayList<Point> takes = new ArrayList<Point>();
+                    	ArrayList<Point> takes = new ArrayList<>();
                         int jumpover = Math.abs(distance) + 1;
                         while (board[i + jumpover * n][j + jumpover * m] == empty) {
                             char[][] copy = copyBoard(board);
@@ -172,7 +171,7 @@ public class Model {
     }
 
     public ArrayList<Move> checkValidMoves(char[][] board, char player) {
-        ArrayList<Move> moves = new ArrayList<Move>();
+        ArrayList<Move> moves = new ArrayList<>();
         for (int i = 1; i < board.length - 1; i++) {
             for (int j = 1; j < board[i].length - 1; j++) {
                 if (board[i][j] == player||board[i][j]==player+2) {

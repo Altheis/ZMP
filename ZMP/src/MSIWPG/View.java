@@ -1,8 +1,8 @@
-package ZMP;
+package MSIWPG;
 
 import java.awt.Point;
 
-public interface View {
+interface View {
 	void displayBoard();
 	char[][] getBoard();
 	Point moveStartCell();

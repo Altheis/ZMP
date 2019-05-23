@@ -1,4 +1,4 @@
-package ZMP;
+package MSIWPG;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,7 +8,7 @@ import java.awt.event.MouseListener;
 public class GuiView implements View {
 
     private char[][] board;
-    private GUI gui;
+    private final GUI gui;
     static public Point startpoint;
     static public Point endpoint;
     static JLabel jl;
@@ -48,13 +48,12 @@ public class GuiView implements View {
     class GUI extends JFrame implements MouseListener {
 
         int xLocation, yLocation;
-        int size = 64;
-        int onePoint = 40;
+        final int onePoint = 40;
 
 
 
-        public GUI() {
-            super("Warcaby");
+        GUI() {
+            super("Checkers");
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             if(Controller.dim==8){
             setSize(400,420);}
@@ -64,7 +63,13 @@ public class GuiView implements View {
             int y=(int)((d.getHeight()-getHeight())/2);
             setLocation(x,y);
             setLayout(new BorderLayout());
-            jl = new JLabel("Rozpocznij grę", JLabel.CENTER);
+
+            if(Controller.opponentPick==3){
+                jl = new JLabel("Enjoy the game", JLabel.CENTER);
+            } else{
+                jl = new JLabel("Start the game", JLabel.CENTER);
+            }
+
             add(BorderLayout.SOUTH, jl);
             addMouseListener(this);
 
@@ -72,22 +77,21 @@ public class GuiView implements View {
 
         }
 
-        public void makeBoard(Graphics g) {
+        void makeBoard(Graphics g) {
             for (int x = 1; x < board.length - 1; x++) {
                 for (int y = 1; y < board.length - 1; y++) {
-
                     if ((x % 2 == 0 && y % 2 != 0) || (x % 2 != 0 && y % 2 == 0)) {
                         g.setColor(new Color(89, 170, 103));
                     } else {
                         g.setColor(new Color(92, 99, 87));
                     }
-
                     g.fillRect(xLocation, yLocation, onePoint, onePoint);
                     yLocation = yLocation + onePoint;
                 }
                 xLocation = xLocation + onePoint;
                 yLocation = 50;
             }
+
             xLocation = 40;
             for (int x = 1; x < board.length - 1; x++) {
                 for (int y = 1; y < board.length - 1; y++) {
@@ -109,6 +113,7 @@ public class GuiView implements View {
                 xLocation = xLocation + onePoint;
                 yLocation = 50;
             }
+
         }
 
 

@@ -1,12 +1,12 @@
-package ZMP;
+package MSIWPG;
 
-public class Factory {
+class Factory {
     static View createView(String name) throws IllegalArgumentException {
         switch (name) {
-            case "ZMP.ConsoleView":
+            case "MSIWPG.ConsoleView":
                 return new ConsoleView();
 
-            case "ZMP.GuiView":
+            case "MSIWPG.GuiView":
                 return new GuiView();
 
             default:
@@ -16,9 +16,9 @@ public class Factory {
 
     static AI createAI(String name) throws IllegalArgumentException {
         switch (name) {
-            case "ZMP.RandomAI":
+            case "MSIWPG.RandomAI":
                 return new RandomAI();
-            case "ZMP.ScoringAI":
+            case "MSIWPG.ScoringAI":
                 return new ScoringAI();
             default:
                 throw new IllegalArgumentException();

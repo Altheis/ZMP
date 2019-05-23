@@ -1,4 +1,4 @@
-package ZMP;
+package MSIWPG;
 
 import java.awt.Point;
 import java.io.BufferedReader;
@@ -11,10 +11,10 @@ public class ConsoleView implements View {
 	
 	@Override
 	public void displayBoard() {
-		for(int i = 0; i<this.board.length; i++) {
-			for(int j = 0; j<this.board[i].length; j++) System.out.print(" "+this.board[i][j]);
-			System.out.print("\n");
-		}
+        for (char[] chars : this.board) {
+			for (char aChar : chars) System.out.print(" " + aChar);
+            System.out.print("\n");
+        }
 
 	}
 	@Override
@@ -26,7 +26,7 @@ public class ConsoleView implements View {
 	public Point moveStartCell() {
 		String input;
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		System.out.println("Wybierz współrzędne początkowe");
+		System.out.println("Pick staring point");
 		try {
 			input = br.readLine();
 			if(input.length()!=2) return moveStartCell();
@@ -40,7 +40,7 @@ public class ConsoleView implements View {
 	public Point moveEndCell() {
 		String input;
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		System.out.println("Wybierz współrzędne końcowe");
+		System.out.println("Pick ending point");
 		try {
 			input = br.readLine();
 			if(input.length()!=2) return moveEndCell();

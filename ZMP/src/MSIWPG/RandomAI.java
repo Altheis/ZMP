@@ -1,4 +1,4 @@
-package ZMP;
+package MSIWPG;
 
 import java.util.ArrayList;
 import java.util.Random;
